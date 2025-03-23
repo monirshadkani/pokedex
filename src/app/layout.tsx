@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { PokemonTypesProvider } from "@/contexts/PokemonTypesContextProvider";
+import { PokemonProvider } from "@/contexts/PokemonContextProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +29,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <PokemonTypesProvider>
+          <PokemonProvider>
+            <div>{children}</div>
+          </PokemonProvider>
+        </PokemonTypesProvider>
       </body>
     </html>
   );

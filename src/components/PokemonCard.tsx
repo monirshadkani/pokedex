@@ -1,27 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
-
-interface Pokemon {
-  id: number;
-  name: { fr: string; en: string };
-  image: string;
-  generation: number;
-  types: string[];
-}
+import { UsePokemonTypes } from "@/contexts/PokemonTypesContext";
+import { Pokemon } from "../types/pokemon";
 
 export const PokemonCard = ({ pokemon }: { pokemon: Pokemon }) => {
-  console.log(pokemon.name);
+  const types = UsePokemonTypes();
+  const matchedTypes = pokemon.types.map((typeId: number) =>
+    types.find((type) => type.id === typeId)
+  );
 
   return (
     <div
-      className="flex flex-col md:flex-row justify-between md:items-start gap-1"
+      className=" flex-shrink-0 m-6 relative overflow-hidden w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
       key={pokemon.id}
     >
-      <p>{pokemon.id}</p>
-      <h3>{pokemon.name.en}</h3>
-      <img src={pokemon.image}></img>
+      <p>#{pokemon.id}</p>
+      <h3 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        {pokemon.name.en}
+      </h3>
+      <img
+        className="w-24 h-24 mb-3 rounded-full shadow-lg"
+        src={pokemon.image}
+      ></img>
       <p>{pokemon.generation}</p>
-      <p>{pokemon.types}</p>
+      <div className="flex space-x-2">
+        {matchedTypes.map((type, index) =>
+          type ? (
+            <div key={index} className="flex items-center space-x-1">
+              <img className="w-6 h-6" src={type.image} />
+              <p>{type.name.en}</p>
+            </div>
+          ) : null
+        )}
+      </div>
     </div>
   );
 };
