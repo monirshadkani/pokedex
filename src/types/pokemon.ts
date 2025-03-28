@@ -3,6 +3,9 @@ export interface Pokemon {
   generation: number;
   name: { fr: string; en: string };
   image: string;
+  image_shiny: string;
+  height: number;
+  weight: number;
   stats: {
     hp: number;
     atk: number;
@@ -12,6 +15,8 @@ export interface Pokemon {
     vit: number;
   };
   types: number[];
+  evolvedFrom: Record<string, string>;
+  evolvesTo: Record<string, string>;
 }
 
 export interface Type {
