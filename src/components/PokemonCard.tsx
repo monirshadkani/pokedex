@@ -2,6 +2,7 @@ import { memo } from "react";
 import React from "react";
 import { usePokemonTypeMatching } from "@/hooks/usePokemonTypes";
 import { Pokemon } from "../types/pokemon";
+import { useTranslation } from "react-i18next";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -11,6 +12,8 @@ interface PokemonCardProps {
 export const PokemonCard = memo(
   ({ pokemon, handlePokemonClick }: PokemonCardProps) => {
     const matchedTypes = usePokemonTypeMatching(pokemon.types);
+    const { i18n } = useTranslation();
+    const currentLanguage = i18n.language as "en" | "fr";
 
     const handleMouseEnter = () => {
       const mainImage = new Image();
@@ -28,7 +31,7 @@ export const PokemonCard = memo(
       >
         <p>#{pokemon.id}</p>
         <h3 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {pokemon.name.en}
+          {pokemon.name[currentLanguage]}
         </h3>
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
@@ -40,7 +43,7 @@ export const PokemonCard = memo(
             type ? (
               <div key={index} className="flex items-center space-x-1">
                 <img className="w-6 h-6" src={type.image} />
-                <p>{type.name.en}</p>
+                <p>{type.name[currentLanguage]}</p>
               </div>
             ) : null
           )}

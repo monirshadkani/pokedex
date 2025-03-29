@@ -25,7 +25,8 @@ export const pokemonGenerations = [
 ];
 
 export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language as "en" | "fr";
 
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const openPokemonModal = (pokemon: Pokemon) => () => {
@@ -56,7 +57,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter((pokemon) =>
-        pokemon.name.en.toLowerCase().includes(term)
+        pokemon.name[currentLanguage].toLowerCase().includes(term)
       );
     }
 
@@ -74,7 +75,10 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
       const multiplier = sortDirection === "asc" ? 1 : -1;
       switch (sortField) {
         case "name":
-          return multiplier * a.name.en.localeCompare(b.name.en);
+          return (
+            multiplier *
+            a.name[currentLanguage].localeCompare(b.name[currentLanguage])
+          );
         case "id":
           return multiplier * (a.id - b.id);
         case "weight":
@@ -92,12 +96,15 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
     sortDirection,
     typeIDFilter,
     generationFilter,
+    currentLanguage,
   ]);
 
   return (
     <>
       <div>
-        <SearchInput onSearch={setSearchTerm} />
+        <div className="flex justify-between items-center mb-4">
+          <SearchInput onSearch={setSearchTerm} />
+        </div>
         <div className="flex gap-2">
           <label>{t("sort_by")}:</label>
           <select

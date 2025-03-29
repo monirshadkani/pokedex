@@ -9,7 +9,6 @@ interface ProvidersProps {
 
 const Providers = ({ children }: ProvidersProps) => {
   useEffect(() => {
-    // Force initial language to match server
     i18n.changeLanguage("en");
   }, []);
 
