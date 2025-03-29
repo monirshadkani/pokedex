@@ -1,7 +1,7 @@
 import { Pokemon } from "@/types/pokemon";
 import { usePokemonTypeMatching } from "@/hooks/usePokemonTypes";
 import { pokemonGenerations } from "./PokemonList";
-import { memo } from "react";
+import { memo, useState, cloneElement, useMemo } from "react";
 
 interface PokemonModalProps {
   isOpen: boolean;
@@ -19,8 +19,20 @@ const PokemonModalComponent = ({
   if (!isOpen) return null;
 
   const matchedTypes = usePokemonTypeMatching(pokemon.types);
-  const pokGen = pokemonGenerations.find(
-    (gen) => gen.id === pokemon.generation
+  const pokGen = useMemo(
+    () => pokemonGenerations.find((gen) => gen.id === pokemon.generation),
+    [pokemon.generation]
+  );
+  const [imgShiny, setImgShiny] = useState(false);
+
+  const stats = useMemo(
+    () =>
+      Object.entries(pokemon.stats).map(([statName, statValue]) => (
+        <p className="text-gray-900" key={statName}>
+          {statName}: {statValue}
+        </p>
+      )),
+    [pokemon.stats]
   );
 
   return (
@@ -34,16 +46,12 @@ const PokemonModalComponent = ({
             <p className="text-gray-900">#{pokemon.id}</p>
             <img
               className="w-24 h-24 mb-3 rounded-full shadow-lg"
-              src={pokemon.image}
+              onClick={() => {
+                setImgShiny((imgShiny) => !imgShiny);
+              }}
+              src={imgShiny ? pokemon.image_shiny : pokemon.image}
               alt={pokemon.name.en}
             />
-            <img
-              className="w-24 h-24 mb-3 rounded-full shadow-lg"
-              src={pokemon.image_shiny}
-              alt={`${pokemon.name.en} shiny`}
-            />
-
-            {children}
 
             <p className="text-gray-900">{pokemon.name.en}</p>
             <p className="text-gray-900">Generation: {pokGen?.name}</p>
@@ -60,13 +68,13 @@ const PokemonModalComponent = ({
                 ) : null
               )}
             </div>
-            <div>
-              {Object.entries(pokemon.stats).map(([statName, statValue]) => (
-                <p className="text-gray-900" key={statName}>
-                  {statName}: {statValue}
-                </p>
-              ))}
-            </div>
+            <div>{stats}</div>
+            {cloneElement(
+              children as React.ReactElement<{ isShiny: boolean }>,
+              {
+                isShiny: imgShiny,
+              }
+            )}
           </div>
         </div>
       </div>
@@ -74,4 +82,12 @@ const PokemonModalComponent = ({
   );
 };
 
-export const PokemonModal = memo(PokemonModalComponent);
+export const PokemonModal = memo(
+  PokemonModalComponent,
+  (prevProps, nextProps) => {
+    return (
+      prevProps.isOpen === nextProps.isOpen &&
+      prevProps.pokemon?.id === nextProps.pokemon?.id
+    );
+  }
+);

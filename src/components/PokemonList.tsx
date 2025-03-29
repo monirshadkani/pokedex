@@ -3,7 +3,7 @@ import React from "react";
 import { PokemonCard } from "../components/PokemonCard";
 import { SearchInput } from "@/components/SearchBar";
 import { Pokemon } from "@/types/pokemon";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { UsePokemonTypes } from "@/contexts/PokemonTypesContext";
 import { PokemonModal } from "./PokemonModal";
 import { EvolutionTree } from "./EvolutionTree";
@@ -32,6 +32,10 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
   const closePokemonModal = () => {
     setSelectedPokemon(null);
     console.log("close modal");
+  };
+
+  const handleEvolutionClick = (pok: Pokemon) => {
+    setSelectedPokemon(pok);
   };
 
   const types = UsePokemonTypes();
@@ -149,7 +153,12 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
         close={closePokemonModal}
         pokemon={selectedPokemon as Pokemon}
       >
-        {selectedPokemon && <EvolutionTree pokemon={selectedPokemon} />}
+        {selectedPokemon && (
+          <EvolutionTree
+            onEvolutionClick={handleEvolutionClick}
+            pokemon={selectedPokemon}
+          />
+        )}
       </PokemonModal>
       <div className="p-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {filteredPokemons.map((pokemon) => (

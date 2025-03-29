@@ -8,8 +8,8 @@ interface PokemonCardProps {
   handlePokemonClick?: () => void;
 }
 
-export const PokemonCard = memo<PokemonCardProps>(
-  ({ pokemon, handlePokemonClick }) => {
+export const PokemonCard = memo(
+  ({ pokemon, handlePokemonClick }: PokemonCardProps) => {
     const matchedTypes = usePokemonTypeMatching(pokemon.types);
 
     const handleMouseEnter = () => {
