@@ -1,0 +1,26 @@
+{
+  "search": "Rechercher",
+  "sort_by": "Trier par",
+  "all_types": "Tous les types",
+  "all_generations": "Toutes les générations",
+  "generation": "Génération",
+  "height": "Taille",
+  "weight": "Poids",
+  "stats": "Statistiques",
+  "evolutions": "Évolutions",
+  "close": "Fermer",
+  "sort": {
+    "id": "ID",
+    "name": "Nom",
+    "weight": "Poids",
+    "height": "Taille"
+  },
+  "stats": {
+    "hp": "PV",
+    "atk": "Attaque",
+    "def": "Défense",
+    "spe_atk": "Attaque Spéciale",
+    "spe_def": "Défense Spéciale",
+    "vit": "Vitesse"
+  }
+}

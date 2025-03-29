@@ -1,0 +1,26 @@
+{
+  "search": "Search",
+  "sort_by": "Sort by",
+  "all_types": "All Types",
+  "all_generations": "All Generations",
+  "generation": "Generation",
+  "height": "Height",
+  "weight": "Weight",
+  "stats": "Stats",
+  "evolutions": "Evolutions",
+  "close": "Close",
+  "sort": {
+    "id": "ID",
+    "name": "Name",
+    "weight": "Weight",
+    "height": "Height"
+  },
+  "stats": {
+    "hp": "HP",
+    "atk": "Attack",
+    "def": "Defense",
+    "spe_atk": "Special Attack",
+    "spe_def": "Special Defense",
+    "vit": "Speed"
+  }
+}

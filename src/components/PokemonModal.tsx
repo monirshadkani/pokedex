@@ -2,6 +2,7 @@ import { Pokemon } from "@/types/pokemon";
 import { usePokemonTypeMatching } from "@/hooks/usePokemonTypes";
 import { pokemonGenerations } from "./PokemonList";
 import { memo, useState, cloneElement, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 interface PokemonModalProps {
   isOpen: boolean;
@@ -16,24 +17,25 @@ const PokemonModalComponent = ({
   pokemon,
   children,
 }: PokemonModalProps) => {
-  if (!isOpen) return null;
-
-  const matchedTypes = usePokemonTypeMatching(pokemon.types);
-  const pokGen = useMemo(
-    () => pokemonGenerations.find((gen) => gen.id === pokemon.generation),
-    [pokemon.generation]
-  );
+  const { t } = useTranslation();
   const [imgShiny, setImgShiny] = useState(false);
+  const matchedTypes = usePokemonTypeMatching(pokemon?.types || []);
+  const pokGen = useMemo(
+    () => pokemonGenerations.find((gen) => gen.id === pokemon?.generation),
+    [pokemon?.generation]
+  );
 
   const stats = useMemo(
     () =>
-      Object.entries(pokemon.stats).map(([statName, statValue]) => (
+      Object.entries(pokemon?.stats || {}).map(([statName, statValue]) => (
         <p className="text-gray-900" key={statName}>
-          {statName}: {statValue}
+          {t(`stats.${statName}`)}: {statValue}
         </p>
       )),
-    [pokemon.stats]
+    [pokemon?.stats, t]
   );
+
+  if (!isOpen || !pokemon) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-800/50 flex items-center justify-center z-50">
@@ -41,7 +43,7 @@ const PokemonModalComponent = ({
         <div className="flex justify-between items-center mb-6">
           <div className="modal-content">
             <button className="text-gray-900" onClick={close}>
-              X
+              {t("close")}
             </button>
             <p className="text-gray-900">#{pokemon.id}</p>
             <img
@@ -54,10 +56,16 @@ const PokemonModalComponent = ({
             />
 
             <p className="text-gray-900">{pokemon.name.en}</p>
-            <p className="text-gray-900">Generation: {pokGen?.name}</p>
+            <p className="text-gray-900">
+              {t("generation")}: {pokGen?.name}
+            </p>
 
-            <p className="text-gray-900">height: {pokemon.height}</p>
-            <p className="text-gray-900">weight: {pokemon.weight}</p>
+            <p className="text-gray-900">
+              {t("height")}: {pokemon.height}
+            </p>
+            <p className="text-gray-900">
+              {t("weight")}: {pokemon.weight}
+            </p>
             <div className="flex space-x-2">
               {matchedTypes.map((type, index) =>
                 type ? (

@@ -7,6 +7,7 @@ import { useState, useMemo } from "react";
 import { UsePokemonTypes } from "@/contexts/PokemonTypesContext";
 import { PokemonModal } from "./PokemonModal";
 import { EvolutionTree } from "./EvolutionTree";
+import { useTranslation } from "react-i18next";
 
 interface PokemonListProps {
   pokemons: Pokemon[];
@@ -24,6 +25,8 @@ export const pokemonGenerations = [
 ];
 
 export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
+  const { t } = useTranslation();
+
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const openPokemonModal = (pokemon: Pokemon) => () => {
     setSelectedPokemon(pokemon);
@@ -96,7 +99,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
       <div>
         <SearchInput onSearch={setSearchTerm} />
         <div className="flex gap-2">
-          <label>Sort by:</label>
+          <label>{t("sort_by")}:</label>
           <select
             onChange={(e) =>
               setSortField(
@@ -104,10 +107,10 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
               )
             }
           >
-            <option value="id">ID</option>
-            <option value="name">Name</option>
-            <option value="weight">Weight</option>
-            <option value="height">Height</option>
+            <option value="id">{t("sort.id")}</option>
+            <option value="name">{t("sort.name")}</option>
+            <option value="weight">{t("sort.weight")}</option>
+            <option value="height">{t("sort.height")}</option>
           </select>
           <button
             onClick={() =>
@@ -123,7 +126,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
               setTypeIDFilter(e.target.value ? Number(e.target.value) : null)
             }
           >
-            <option value="">All Types</option>
+            <option value="">{t("all_types")}</option>
             {types.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name.en}
@@ -139,7 +142,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
               )
             }
           >
-            <option value="">All Generations</option>
+            <option value="">{t("all_generations")}</option>
             {pokemonGenerations.map((generation) => (
               <option key={generation.id} value={generation.id}>
                 {generation.name}
