@@ -101,61 +101,67 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
 
   return (
     <>
-      <div>
-        <div className="flex justify-between items-center mb-4">
+      <div className="space-y-6 mb-8">
+        <div className="flex justify-between items-center">
           <SearchInput onSearch={setSearchTerm} />
         </div>
-        <div className="flex gap-2">
-          <label>{t("sort_by")}:</label>
-          <select
-            onChange={(e) =>
-              setSortField(
-                e.target.value as "name" | "id" | "weight" | "height"
-              )
-            }
-          >
-            <option value="id">{t("sort.id")}</option>
-            <option value="name">{t("sort.name")}</option>
-            <option value="weight">{t("sort.weight")}</option>
-            <option value="height">{t("sort.height")}</option>
-          </select>
-          <button
-            onClick={() =>
-              setSortDirection(sortDirection === "asc" ? "desc" : "asc")
-            }
-          >
-            {sortDirection === "asc" ? "▲" : "▼"}
-          </button>
-        </div>
-        <div>
-          <select
-            onChange={(e) =>
-              setTypeIDFilter(e.target.value ? Number(e.target.value) : null)
-            }
-          >
-            <option value="">{t("all_types")}</option>
-            {types.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name.en}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <select
-            onChange={(e) =>
-              setGenerationFilter(
-                e.target.value ? Number(e.target.value) : null
-              )
-            }
-          >
-            <option value="">{t("all_generations")}</option>
-            {pokemonGenerations.map((generation) => (
-              <option key={generation.id} value={generation.id}>
-                {generation.name}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex items-center gap-2">
+            <label className="font-medium text-gray-600">{t("sort_by")}:</label>
+            <select
+              className="px-3 py-1 border rounded-md bg-white text-gray-900"
+              onChange={(e) =>
+                setSortField(
+                  e.target.value as "name" | "id" | "weight" | "height"
+                )
+              }
+            >
+              <option value="id">{t("sort.id")}</option>
+              <option value="name">{t("sort.name")}</option>
+              <option value="weight">{t("sort.weight")}</option>
+              <option value="height">{t("sort.height")}</option>
+            </select>
+            <button
+              className="px-3 py-1 border rounded-md bg-white text-gray-900 hover:bg-gray-50 min-w-[32px]"
+              onClick={() =>
+                setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+              }
+            >
+              {sortDirection === "asc" ? "▲" : "▼"}
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              className="px-3 py-1 border rounded-md bg-white text-gray-900"
+              onChange={(e) =>
+                setTypeIDFilter(e.target.value ? Number(e.target.value) : null)
+              }
+            >
+              <option value="">{t("all_types")}</option>
+              {types.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.name[currentLanguage]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              className="px-3 py-1 border rounded-md bg-white text-gray-900"
+              onChange={(e) =>
+                setGenerationFilter(
+                  e.target.value ? Number(e.target.value) : null
+                )
+              }
+            >
+              <option value="">{t("all_generations")}</option>
+              {pokemonGenerations.map((generation) => (
+                <option key={generation.id} value={generation.id}>
+                  {generation.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
       <PokemonModal
@@ -170,7 +176,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
           />
         )}
       </PokemonModal>
-      <div className="p-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {filteredPokemons.map((pokemon) => (
           <PokemonCard
             handlePokemonClick={openPokemonModal(pokemon)}

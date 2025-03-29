@@ -6,8 +6,10 @@
   "generation": "Génération",
   "height": "Taille",
   "weight": "Poids",
-  "stats": "Statistiques",
+  "stats_title": "Statistiques",
   "evolutions": "Évolutions",
+  "evolves_from": "Évolue de",
+  "evolves_to": "Évolue en",
   "close": "Fermer",
   "sort": {
     "id": "ID",

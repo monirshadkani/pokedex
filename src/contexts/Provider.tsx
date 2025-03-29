@@ -7,12 +7,10 @@ interface ProvidersProps {
   children: ReactNode;
 }
 
-const Providers = ({ children }: ProvidersProps) => {
+export const Providers: React.FC<ProvidersProps> = ({ children }) => {
   useEffect(() => {
     i18n.changeLanguage("en");
   }, []);
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
-
-export default Providers;

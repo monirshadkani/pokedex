@@ -17,7 +17,8 @@ const PokemonModalComponent = ({
   pokemon,
   children,
 }: PokemonModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language as "en" | "fr";
   const [imgShiny, setImgShiny] = useState(false);
   const matchedTypes = usePokemonTypeMatching(pokemon?.types || []);
   const pokGen = useMemo(
@@ -28,9 +29,10 @@ const PokemonModalComponent = ({
   const stats = useMemo(
     () =>
       Object.entries(pokemon?.stats || {}).map(([statName, statValue]) => (
-        <p className="text-gray-900" key={statName}>
-          {t(`stats.${statName}`)}: {statValue}
-        </p>
+        <div key={statName} className="flex justify-between">
+          <span className="text-gray-800">{t(`stats.${statName}`)}:</span>
+          <span className="text-gray-800">{statValue}</span>
+        </div>
       )),
     [pokemon?.stats, t]
   );
@@ -38,45 +40,72 @@ const PokemonModalComponent = ({
   if (!isOpen || !pokemon) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl w-full max-w-2xl shadow-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <div className="modal-content">
-            <button className="text-gray-900" onClick={close}>
-              {t("close")}
-            </button>
-            <p className="text-gray-900">#{pokemon.id}</p>
-            <img
-              className="w-24 h-24 mb-3 rounded-full shadow-lg"
-              onClick={() => {
-                setImgShiny((imgShiny) => !imgShiny);
-              }}
-              src={imgShiny ? pokemon.image_shiny : pokemon.image}
-              alt={pokemon.name.en}
-            />
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 w-full max-w-2xl relative rounded-lg">
+        <button
+          onClick={close}
+          className="absolute top-2 right-2 text-gray-800 text-xl hover:text-gray-600"
+        >
+          ✕
+        </button>
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <div className="mb-2">
+              <h2 className="text-xl font-bold text-gray-900">
+                {pokemon.name[currentLanguage]}
+              </h2>
+            </div>
 
-            <p className="text-gray-900">{pokemon.name.en}</p>
-            <p className="text-gray-900">
-              {t("generation")}: {pokGen?.name}
-            </p>
+            <div className="flex items-center gap-2 mb-2 text-gray-800">
+              <span>#{pokemon.id}</span>
+              <span>•</span>
+              <span>{pokGen?.name}</span>
+            </div>
 
-            <p className="text-gray-900">
-              {t("height")}: {pokemon.height}
-            </p>
-            <p className="text-gray-900">
-              {t("weight")}: {pokemon.weight}
-            </p>
-            <div className="flex space-x-2">
+            <div className="flex justify-center mb-4">
+              <img
+                className="w-24 h-24 cursor-pointer"
+                onClick={() => setImgShiny((imgShiny) => !imgShiny)}
+                src={imgShiny ? pokemon.image_shiny : pokemon.image}
+                alt={pokemon.name[currentLanguage]}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <div className="text-sm text-gray-800">{t("height")}</div>
+                <div className="text-gray-800">{pokemon.height}</div>
+              </div>
+              <div>
+                <div className="text-sm text-gray-800">{t("weight")}</div>
+                <div className="text-gray-800">{pokemon.weight}</div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-4">
               {matchedTypes.map((type, index) =>
                 type ? (
-                  <div key={index} className="flex items-center space-x-1">
-                    <img className="w-6 h-6" src={type.image} />
-                    <p className="text-gray-900">{type.name.en}</p>
+                  <div key={index} className="flex items-center gap-1">
+                    <img
+                      className="w-4 h-4"
+                      src={type.image}
+                      alt={type.name[currentLanguage]}
+                    />
+                    <span className="text-gray-800">
+                      {type.name[currentLanguage]}
+                    </span>
                   </div>
                 ) : null
               )}
             </div>
-            <div>{stats}</div>
+
+            <div className="mb-4">
+              <h3 className=" mb-2 font-bold text-gray-900">
+                {t("stats_title")}
+              </h3>
+              <div className="space-y-1 ">{stats}</div>
+            </div>
+
             {cloneElement(
               children as React.ReactElement<{ isShiny: boolean }>,
               {
